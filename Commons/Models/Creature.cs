@@ -13,7 +13,7 @@ namespace ShorewoodForest.Commons.Models
         public int Stamina { get => _Stamina; set => _Stamina = value; }
         public int Health { get => _Health; set => _Health = value; }
 
-        internal int Hit()
+        internal int Attack()
         {
             Random dice = new Random();
             int damages = dice.Next(1,5);

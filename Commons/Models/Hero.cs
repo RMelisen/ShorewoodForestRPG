@@ -22,7 +22,7 @@ namespace ShorewoodForest.Commons.Models
 
         public Hero(int health, int stamina, int strength, CreatureRace.HeroRace race, string name)
         {
-            Name = Name;
+            Name = name;
             Health = health;
             Stamina = stamina;
             Strength = strength;
