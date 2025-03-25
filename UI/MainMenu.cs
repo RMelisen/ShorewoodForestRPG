@@ -166,10 +166,11 @@ namespace ShorewoodForest.UI
                     DisplayMonsterInfo(enemy.monster, layout);
                     liveDisplayContext.Refresh();
 
-                    if (Fight(enemy.monster, layout, liveDisplayContext))
-                    {
-                        // Victory
-                    }
+                    Fight(enemy.monster, layout, liveDisplayContext);
+
+                    _EnemiesPositions.RemoveAll(m => m.x == enemy.x && m.y == enemy.y);
+
+                    return;
                 }
             }
         }
@@ -299,18 +300,19 @@ namespace ShorewoodForest.UI
                 infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Fight ![/]");
 
                 layout["RightBottom"].Update(infoPanel.Expand());
-
                 liveDisplayContext.Refresh();
-
-                Thread.Sleep(2000);
 
                 monster.Health -= heroDamages;
                 DisplayMonsterInfo(monster, layout);
                 liveDisplayContext.Refresh();
 
+                Thread.Sleep(2000);
+
                 if (monster.Health > 0)
                 {
                     UserHero.Health -= monster.Attack();
+                    DisplayHeroInfo(layout);
+                    liveDisplayContext.Refresh();
 
                     infoPanel = new Panel(
                         Align.Left(
@@ -319,9 +321,6 @@ namespace ShorewoodForest.UI
                     infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Fight ![/]");
 
                     layout["RightBottom"].Update(infoPanel.Expand());
-
-                    DisplayHeroInfo(layout);
-
                     liveDisplayContext.Refresh();
 
                     Thread.Sleep(2000);
@@ -376,7 +375,7 @@ namespace ShorewoodForest.UI
                         Align.Left(
                         new Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]You won ![/]" +
                         $"\n\nYou carved [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Leather} leather[/] on the whelp" +
-                        $"\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the orc"),
+                        $"\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the whelp"),
                         VerticalAlignment.Middle));
                     infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
 
