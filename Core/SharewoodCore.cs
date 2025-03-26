@@ -15,15 +15,7 @@ namespace ShorewoodForest.Core
 
         internal static int CalculateStamina(CreatureRace.HeroRace heroRace)
         {
-            int stamina = 0;
-            List<int> diceValues = new List<int>();
-
-            ThrowDices(diceValues, 4);
-
-            diceValues.Sort((x, y) => y.CompareTo(x)); // Sort in descending order
-
-            foreach (int diceValue in diceValues.Take(3).ToList())
-                stamina += diceValue;
+            int stamina = CalculateStat(4, 500);
 
             switch (heroRace)
             {
@@ -37,37 +29,14 @@ namespace ShorewoodForest.Core
                     break;
             }
 
-            if (stamina < 6)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] [{UIStyle.NEGATIVE_INDICATOR_COLOR}]{stamina}[/]");
-            }
-            else if (stamina < 11)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] {stamina}");
-            }
-            else if (stamina < 16)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] [{UIStyle.POSITIVE_INDICATOR_COLOR}]{stamina}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] [{UIStyle.VERYPOSITIVE_INDICATOR_COLOR}]{stamina}[/]");
-            }
+            DisplayStat("Stamina", stamina);
 
             return stamina;
         }
 
         internal static int CalculateStrength(CreatureRace.HeroRace heroRace)
         {
-            int strength = 0;
-            List<int> diceValues = new List<int>();
-
-            ThrowDices(diceValues, 4);
-
-            diceValues.Sort((x, y) => y.CompareTo(x)); // Sort in descending order
-
-            foreach (int diceValue in diceValues.Take(3).ToList())
-                strength += diceValue;
+            int strength = CalculateStat(4, 500);
 
             switch (heroRace)
             {
@@ -81,22 +50,7 @@ namespace ShorewoodForest.Core
                     break;
             }
 
-            if (strength < 6)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] [{UIStyle.NEGATIVE_INDICATOR_COLOR}]{strength}[/]");
-            }
-            else if (strength < 11)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] {strength}");
-            }
-            else if (strength < 16)
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] [{UIStyle.POSITIVE_INDICATOR_COLOR}]{strength}[/]");
-            }
-            else
-            {
-                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] [{UIStyle.VERYPOSITIVE_INDICATOR_COLOR}]{strength}[/]");
-            }
+            DisplayStat("Strength", strength);
 
             return strength;
         }
@@ -139,25 +93,45 @@ namespace ShorewoodForest.Core
             return health;
         }
 
+        internal static void DisplayStat(string stat, int statValue)
+        {
+            if (statValue < 6)
+            {
+                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{stat} :[/] [{UIStyle.NEGATIVE_INDICATOR_COLOR}]{statValue}[/]");
+            }
+            else if (statValue < 11)
+            {
+                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{stat} :[/] {statValue}");
+            }
+            else if (statValue < 16)
+            {
+                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{stat} :[/] [{UIStyle.POSITIVE_INDICATOR_COLOR}]{statValue}[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{stat} :[/] [{UIStyle.VERYPOSITIVE_INDICATOR_COLOR}]{statValue}[/]");
+            }
+        }
+
         #endregion
 
         #region Dices
 
-        internal static void ThrowDices(List<int> diceValues, int counter)
+        internal static void ThrowDices(List<int> diceValues, int counter, int sleepTime)
         {
 
             for (int i = 0; i < counter; i++)
             {
-                Thread.Sleep(500);
-                diceValues.Add(ThrowDice());
+                Thread.Sleep(sleepTime);
+                diceValues.Add(ThrowDice(7));
             }
         }
 
-        internal static int ThrowDice()
+        internal static int ThrowDice(int maxValue)
         {
             Random dice = new Random();
 
-            int diceValue = dice.Next(1, 7);
+            int diceValue = dice.Next(1, maxValue);
 
             if (diceValue < 3)
                 AnsiConsole.Markup($"[{UIStyle.NEGATIVE_INDICATOR_COLOR}]{diceValue}[/]  ");
@@ -167,6 +141,17 @@ namespace ShorewoodForest.Core
                 AnsiConsole.Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]{diceValue}[/]  ");
 
             return diceValue;
+        }
+
+        internal static int CalculateStat(int numberOfDices, int sleepTime)
+        {
+            List<int> diceValues = new List<int>();
+
+            ThrowDices(diceValues, numberOfDices,  sleepTime);
+
+            diceValues.Sort((x, y) => y.CompareTo(x)); // Sort in descending order
+
+            return diceValues.Take(3).ToList().Sum();
         }
 
         #endregion

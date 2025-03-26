@@ -32,14 +32,14 @@ namespace ShorewoodForest.UI
         {
             AnsiConsole.MarkupLine($"[{UIStyle.NEUTRAL_INDICATOR_COLOR} Bold]Welcome to the Shorewood Forest ![/]\n");
 
-            CreateHero();
+            CreateHeroUI();
 
             RunMapExplorer();
         }
 
         #region Hero Creation
 
-        internal static void CreateHero()
+        internal static void CreateHeroUI()
         {
             int health = 0;
             int stamina = 0;
@@ -168,7 +168,7 @@ namespace ShorewoodForest.UI
 
                     Fight(enemy.monster, layout, liveDisplayContext);
 
-                    _EnemiesPositions.RemoveAll(m => m.x == enemy.x && m.y == enemy.y);
+                    _EnemiesPositions.Remove((enemy.x, enemy.y, enemy.monster));
 
                     return;
                 }
