@@ -116,7 +116,6 @@ namespace ShorewoodForest.Core
 
         internal static void ThrowDices(List<int> diceValues, int counter, int sleepTime)
         {
-
             for (int i = 0; i < counter; i++)
             {
                 Thread.Sleep(sleepTime);
@@ -130,12 +129,7 @@ namespace ShorewoodForest.Core
 
             int diceValue = dice.Next(1, maxValue);
 
-            if (diceValue < 3)
-                AnsiConsole.Markup($"[{UIStyle.NEGATIVE_INDICATOR_COLOR}]{diceValue}[/]  ");
-            else if (diceValue < 5)
-                AnsiConsole.Markup($"{diceValue}  ");
-            else
-                AnsiConsole.Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]{diceValue}[/]  ");
+            AnsiConsole.Markup($"{diceValue}  ");
 
             return diceValue;
         }

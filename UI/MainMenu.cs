@@ -101,7 +101,7 @@ namespace ShorewoodForest.UI
 
             Panel infoPanel = new Panel(
                 Align.Left(
-                new Markup($"You are in the Shorewood Forest ..."),
+                new Markup($"You are in the Shorewood Forest ...\n\nUse the [{UIStyle.NEUTRAL_INDICATOR_COLOR}]directional keys[/] to move"),
                 VerticalAlignment.Middle));
             infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Exploration[/]");
 
@@ -161,6 +161,8 @@ namespace ShorewoodForest.UI
                 if ((Math.Abs(enemy.x - x) <= 1 && Math.Abs(enemy.y - y) == 0) || (Math.Abs(enemy.x - x) == 0 && Math.Abs(enemy.y - y) <= 1))
                 {
                     // Adjacent enemy found
+                    Thread.Sleep(1200);
+
                     DisplayMonsterInfo(enemy.monster, layout);
                     liveDisplayContext.Refresh();
 
