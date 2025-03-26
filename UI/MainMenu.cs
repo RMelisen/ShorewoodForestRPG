@@ -161,8 +161,6 @@ namespace ShorewoodForest.UI
                 if ((Math.Abs(enemy.x - x) <= 1 && Math.Abs(enemy.y - y) == 0) || (Math.Abs(enemy.x - x) == 0 && Math.Abs(enemy.y - y) <= 1))
                 {
                     // Adjacent enemy found
-                    Thread.Sleep(1200);
-
                     DisplayMonsterInfo(enemy.monster, layout);
                     liveDisplayContext.Refresh();
 
@@ -203,6 +201,13 @@ namespace ShorewoodForest.UI
                             validPosition = false;
                             break;
                         }
+                    }
+
+                    // Should not spawn next to the Hero
+                    if (Math.Abs(x - _PixelX) <= 2 && Math.Abs(y - _PixelY) <= 2)  
+                    {
+                        validPosition = false;
+                        break;
                     }
 
                     // Check if position is already occupied by something

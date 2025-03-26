@@ -161,6 +161,7 @@ namespace ShorewoodForest.Core
             layout["RightBottom"].Update(infoPanel.Expand());
             liveDisplayContext.Refresh();
 
+            Thread.Sleep(1200);
             Console.ReadKey();
 
             int heroDamages = 0;
