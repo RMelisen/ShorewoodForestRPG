@@ -130,7 +130,7 @@ namespace ShorewoodForest.UI
             _PrevPixelX = _PixelX;
             _PrevPixelY = _PixelY;
 
-            CheckIfAnyEnemyAdjacent(_PixelX, _PixelY, layout, liveDisplayContext);
+            CheckIfAnyEnemyAdjacent(_PixelX, _PixelY, layout, liveDisplayContext, mapCanvas);
 
             ConsoleKeyInfo key = Console.ReadKey(true);
             switch (key.Key)
@@ -156,7 +156,7 @@ namespace ShorewoodForest.UI
             }
         }
 
-        internal static void CheckIfAnyEnemyAdjacent(int x, int y, Layout layout, LiveDisplayContext liveDisplayContext)
+        internal static void CheckIfAnyEnemyAdjacent(int x, int y, Layout layout, LiveDisplayContext liveDisplayContext, Canvas mapCanvas)
         {
             foreach ((int x, int y, Monster monster) enemy in _EnemiesPositions)
             {
@@ -168,7 +168,11 @@ namespace ShorewoodForest.UI
 
                     Fight(enemy.monster, layout, liveDisplayContext);
 
+                    mapCanvas.SetPixel(enemy.x, enemy.y, Color.Black);
                     _EnemiesPositions.Remove((enemy.x, enemy.y, enemy.monster));
+
+                    ClearDisplay(layout, "RightTopRight");
+                    liveDisplayContext.Refresh();
 
                     return;
                 }
@@ -265,6 +269,15 @@ namespace ShorewoodForest.UI
             monsterPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Race}[/]");
 
             layout["RightTopRight"].Update(monsterPanel.Expand());
+        }
+
+        internal static void ClearDisplay(Layout layout, string layoutPosition)
+        {
+            layout[layoutPosition].Update(new Panel(
+            Align.Left(
+                new Markup($""),
+                VerticalAlignment.Middle))
+            .Expand());
         }
 
         #endregion
