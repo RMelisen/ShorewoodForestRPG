@@ -246,23 +246,24 @@ namespace ShorewoodForest.UI
         {
             Panel heroPanel = new Panel(
                 Align.Left(
-                new Markup($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Health :[/] {UserHero.Health}" +
-                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] {UserHero.Stamina}" +
-                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] {UserHero.Strength}" +
-                $"\n\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Leather :[/] {UserHero.Leather}" +
-                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Gold :[/] {UserHero.Gold}"),
+                new Markup($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Health :[/]     {UserHero.Health}" +
+                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/]    {UserHero.Stamina}" +
+                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/]   {UserHero.Strength}" +
+                $"\n\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Leather :[/]    {UserHero.Leather}" +
+                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Gold :[/]       {UserHero.Gold}"),
                 VerticalAlignment.Middle));
             heroPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{UserHero.Name} (you)[/]");
 
             layout["RightTopLeft"].Update(heroPanel.Expand());
         }
+
         internal static void DisplayMonsterInfo(Monster monster, Layout layout)
         {
             Panel monsterPanel = new Panel(
                 Align.Left(
-                new Markup($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Health :[/] {monster.Health}" +
-                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/] {monster.Stamina}" +
-                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/] {monster.Strength}"),
+                new Markup($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Health :[/]     {monster.Health}" +
+                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Stamina :[/]    {monster.Stamina}" +
+                $"\n[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Strength :[/]   {monster.Strength}"),
                 VerticalAlignment.Middle));
             monsterPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Race}[/]");
 
