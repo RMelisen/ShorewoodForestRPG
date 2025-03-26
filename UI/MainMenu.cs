@@ -3,8 +3,6 @@ using ShorewoodForest.UI.Commons;
 using ShorewoodForest.Commons.Models;
 using ShorewoodForest.Commons.Enums;
 using ShorewoodForest.Core;
-using System.Threading;
-using Spectre.Console.Rendering;
 
 namespace ShorewoodForest.UI
 {
@@ -166,7 +164,7 @@ namespace ShorewoodForest.UI
                     DisplayMonsterInfo(enemy.monster, layout);
                     liveDisplayContext.Refresh();
 
-                    Fight(enemy.monster, layout, liveDisplayContext);
+                    ShorewoodCore.Fight(enemy.monster, layout, liveDisplayContext);
 
                     mapCanvas.SetPixel(enemy.x, enemy.y, Color.Black);
                     _EnemiesPositions.Remove((enemy.x, enemy.y, enemy.monster));
@@ -279,142 +277,6 @@ namespace ShorewoodForest.UI
                 VerticalAlignment.Middle))
             .Expand());
         }
-
-        #endregion
-
-        #region Fight
-
-        internal static bool Fight(Monster monster, Layout layout, LiveDisplayContext liveDisplayContext)
-        {
-            Panel infoPanel = new Panel(
-                Align.Left(
-                new Markup($"A wild [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Race}[/] appeared !" +
-                $"\n\nPress any key to [{UIStyle.NEUTRAL_INDICATOR_COLOR}]fight[/] !..."),
-                VerticalAlignment.Middle));
-            infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Fight ![/]");
-
-            layout["RightBottom"].Update(infoPanel.Expand());
-            liveDisplayContext.Refresh();
-
-            Console.ReadKey();
-
-            int heroDamages = 0;
-            int monsterDamages = 0;
-
-            while (monster.Health > 0 && UserHero.Health > 0)
-            {
-                heroDamages = UserHero.Attack();
-                monsterDamages = monster.Attack();
-
-                infoPanel = new Panel(
-                    Align.Left(
-                    new Markup($"You hit the [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Race}[/] for [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{heroDamages}[/] damages !"),
-                    VerticalAlignment.Middle));
-                infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Fight ![/]");
-
-                layout["RightBottom"].Update(infoPanel.Expand());
-                liveDisplayContext.Refresh();
-
-                monster.Health -= heroDamages;
-                DisplayMonsterInfo(monster, layout);
-                liveDisplayContext.Refresh();
-
-                Thread.Sleep(2000);
-
-                if (monster.Health > 0)
-                {
-                    UserHero.Health -= monster.Attack();
-                    DisplayHeroInfo(layout);
-                    liveDisplayContext.Refresh();
-
-                    infoPanel = new Panel(
-                        Align.Left(
-                        new Markup($"The [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Race}[/] hit you for [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monsterDamages}[/] damages !"),
-                        VerticalAlignment.Middle));
-                    infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Fight ![/]");
-
-                    layout["RightBottom"].Update(infoPanel.Expand());
-                    liveDisplayContext.Refresh();
-
-                    Thread.Sleep(2000);
-                }
-            }
-
-            if (UserHero.Health > 0)
-            {
-                ShowVictory(monster, infoPanel, layout, liveDisplayContext);
-                return true;
-            }
-            else
-            {
-                ShowDefeat(infoPanel, layout, liveDisplayContext);
-                return false;
-            }
-        }
-
-        #region Victory/Defeat
-
-        internal static void ShowVictory(Monster monster, Panel infoPanel, Layout layout, LiveDisplayContext liveDisplayContext)
-        {
-            UserHero.Leather += monster.Leather;
-            UserHero.Gold += monster.Gold;
-
-            switch (monster.Race)
-            {
-                case CreatureRace.MonsterRace.Wolf:
-                    infoPanel = new Panel(
-                        Align.Left(
-                        new Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]You won ![/]" +
-                        $"\n\nYou carved [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Leather} leather[/] on the wolf"),
-                        VerticalAlignment.Middle));
-                    infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
-
-                    layout["RightBottom"].Update(infoPanel.Expand());
-                    liveDisplayContext.Refresh();
-                    break;
-                case CreatureRace.MonsterRace.Orc:
-                    infoPanel = new Panel(
-                        Align.Left(
-                        new Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]You won ![/]" +
-                        $"\n\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the orc"),
-                        VerticalAlignment.Middle));
-                    infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
-
-                    layout["RightBottom"].Update(infoPanel.Expand());
-                    liveDisplayContext.Refresh();
-                    break;
-                case CreatureRace.MonsterRace.Whelp:
-                    infoPanel = new Panel(
-                        Align.Left(
-                        new Markup($"[{UIStyle.POSITIVE_INDICATOR_COLOR}]You won ![/]" +
-                        $"\n\nYou carved [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Leather} leather[/] on the whelp" +
-                        $"\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the whelp"),
-                        VerticalAlignment.Middle));
-                    infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
-
-                    layout["RightBottom"].Update(infoPanel.Expand());
-                    liveDisplayContext.Refresh();
-                    break;
-            }
-        }
-        internal static void ShowDefeat(Panel infoPanel, Layout layout, LiveDisplayContext liveDisplayContext)
-        {
-            infoPanel = new Panel(
-                Align.Left(
-                new Markup($"[{UIStyle.NEGATIVE_INDICATOR_COLOR} bold]YOU DIED ![/]" +
-                $"\n\nPress any key to [{UIStyle.NEUTRAL_INDICATOR_COLOR}]quit[/]..."),
-                VerticalAlignment.Middle));
-            infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Defeat ![/]");
-
-            layout["RightBottom"].Update(infoPanel.Expand());
-            liveDisplayContext.Refresh();
-
-            Console.ReadKey();
-
-            Environment.Exit(0);
-        }
-
-        #endregion
 
         #endregion
     }
