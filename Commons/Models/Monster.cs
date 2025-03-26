@@ -12,14 +12,14 @@ namespace ShorewoodForest.Commons.Models
     {
         #region CONST
 
-        private const int LOW_MIN_STAT = 3;
-        private const int LOW_MAX_STAT = 7;
+        private const int LOW_MIN_STAT = 2;
+        private const int LOW_MAX_STAT = 6;
 
-        private const int MEDIUM_MIN_STAT = 8;
-        private const int MEDIUM_MAX_STAT = 13;
+        private const int MEDIUM_MIN_STAT = 7;
+        private const int MEDIUM_MAX_STAT = 12;
 
-        private const int HIGH_MIN_STAT = 14;
-        private const int HIGH_MAX_STAT = 19;
+        private const int HIGH_MIN_STAT = 13;
+        private const int HIGH_MAX_STAT = 18;
 
         #endregion
 

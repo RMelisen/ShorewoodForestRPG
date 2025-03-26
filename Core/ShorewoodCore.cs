@@ -8,6 +8,14 @@ namespace ShorewoodForest.Core
 {
     internal class ShorewoodCore
     {
+        #region CONST
+
+        private static int WOLF_XP = 2;
+        private static int ORC_XP = 4;
+        private static int WHELP_XP = 6;
+
+        #endregion
+
         #region Character Creation
 
         internal static int CalculateStamina(CreatureRace.HeroRace heroRace)
@@ -234,6 +242,8 @@ namespace ShorewoodForest.Core
                         $"\n\nYou carved [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Leather} leather[/] on the wolf"),
                         VerticalAlignment.Middle));
                     infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
+
+                    MainMenu.UserHero.AddExperience(WOLF_XP);
                     break;
                 case CreatureRace.MonsterRace.Orc:
                     infoPanel = new Panel(
@@ -242,6 +252,8 @@ namespace ShorewoodForest.Core
                         $"\n\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the orc"),
                         VerticalAlignment.Middle));
                     infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
+
+                    MainMenu.UserHero.AddExperience(ORC_XP);
                     break;
                 case CreatureRace.MonsterRace.Whelp:
                     infoPanel = new Panel(
@@ -251,12 +263,16 @@ namespace ShorewoodForest.Core
                         $"\nYou found [{UIStyle.NEUTRAL_INDICATOR_COLOR}]{monster.Gold} gold[/] on the whelp"),
                         VerticalAlignment.Middle));
                     infoPanel.Header = new PanelHeader($"[{UIStyle.NEUTRAL_INDICATOR_COLOR}]Victory ![/]");
+
+                    MainMenu.UserHero.AddExperience(WHELP_XP);
                     break;
             }
 
+            MainMenu.DisplayHeroInfo(layout);
             layout["RightBottom"].Update(infoPanel.Expand());
             liveDisplayContext.Refresh();
         }
+
         internal static void ShowDefeat(Panel infoPanel, Layout layout, LiveDisplayContext liveDisplayContext)
         {
             infoPanel = new Panel(

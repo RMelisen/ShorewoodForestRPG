@@ -286,6 +286,12 @@ namespace ShorewoodForest.UI
             .Expand());
         }
 
+        internal static void ShowLevelUp()
+        {
+            // Not in use for now
+            //AnsiConsole.MarkupLine($"You gain a [{UIStyle.POSITIVE_INDICATOR_COLOR}]level[/] !\nSome gained some [{UIStyle.NEUTRAL_INDICATOR_COLOR}]stats points[/] and have been [{UIStyle.NEUTRAL_INDICATOR_COLOR}]healed[/]");
+        }
+
         #endregion
     }
 }
